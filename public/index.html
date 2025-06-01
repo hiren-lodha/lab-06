@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LibraHaven</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    body { background-color: #1a202c; color: #e2e8f0; font-family: Arial, sans-serif; }
+    .container { max-width: 400px; margin: 50px auto; padding: 20px; background: #2d3748; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); }
+    input, button { width: 100%; padding: 10px; margin: 5px 0; border: 1px solid #4a5568; border-radius: 4px; background: #4a5568; color: #e2e8f0; }
+    button { background-color: #48bb78; cursor: pointer; }
+    button:hover { background-color: #38a169; }
+    .error { color: #fc8181; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 class="text-2xl font-bold mb-4">LibraHaven</h1>
+    <p class="mb-4">Welcome! Log in to explore your library.</p>
+    <form id="loginForm">
+      <input type="email" id="email" placeholder="Email" required>
+      <input type="password" id="password" placeholder="Password" required>
+      <button type="submit">Login</button>
+    </form>
+    <p id="error" class="error hidden"></p>
+    <p class="mt-4">Need an account? <a href="#" id="registerLink" class="text-green-400">Register</a></p>
+  </div>
+
+  <script>
+    const apiUrl = 'https://community-library-api.onrender.com/api/v1'; // Update to deployed backend URL
+
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const errorElement = document.getElementById('error');
+
+      try {
+        const response = await fetch(`${apiUrl}/auth/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+        const data = await response.json();
+        if (response.ok) {
+          localStorage.setItem('token', data.token);
+          localStorage.setItem('role', data.role);
+          window.location.href = '/dashboard';
+        } else {
+          errorElement.textContent = data.error || 'Login failed';
+          errorElement.classList.remove('hidden');
+        }
+      } catch (error) {
+        errorElement.textContent = 'An error occurred. Please try again.';
+        errorElement.classList.remove('hidden');
+      }
+    });
+
+    document.getElementById('registerLink').addEventListener('click', () => {
+      window.location.href = '/register.html'; // Add a register.html if needed
+    });
+  </script>
+</body>
+</html>

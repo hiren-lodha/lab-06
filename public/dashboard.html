@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LibraHaven Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body { background: linear-gradient(135deg, #1e3c72, #2a5298); color: #fff; }
+    .glass { background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.2); }
+    .card { transition: transform 0.3s, box-shadow 0.3s; }
+    .card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3); }
+    .btn { transition: transform 0.2s; }
+    .btn:hover { transform: scale(1.05); }
+    .dark-theme { background: linear-gradient(135deg, #1a2a44, #1e3c72); color: #fff; }
+    .light-theme { background: linear-gradient(135deg, #e0e7ff, #a3bffa); color: #000; }
+    .footer { background: rgba(0, 0, 0, 0.8); }
+  </style>
+</head>
+<body class="min-h-screen">
+  <nav class="glass p-4 flex justify-between items-center">
+    <div class="text-2xl font-bold">LibraHaven</div>
+    <div class="flex items-center space-x-4">
+      <button id="themeToggle" class="btn bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg">Toggle Theme</button>
+      <span id="userRole" class="text-gray-200"></span>
+      <button id="logoutBtn" class="btn bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg">Log Out</button>
+    </div>
+  </nav>
+  <div class="container mx-auto p-6">
+    <div class="text-center mb-12">
+      <h1 class="text-5xl font-bold mb-4">Welcome to LibraHaven</h1>
+      <p class="text-lg text-gray-200">Explore books, events, and more.</p>
+    </div>
+
+    <div class="mb-10 flex justify-center">
+      <input type="text" id="searchInput" placeholder="Search books by title or author..." class="glass p-3 rounded-lg w-full max-w-lg text-black">
+    </div>
+
+    <div id="adminSection" class="hidden mb-12 glass p-6 rounded-xl">
+      <h2 class="text-2xl font-bold mb-4">Admin Panel</h2>
+      <form id="bookForm" class="mb-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+        <input type="text" id="bookTitle" placeholder="Title" class="p-3 border rounded-lg text-black">
+        <input type="text" id="bookAuthor" placeholder="Author" class="p-3 border rounded-lg text-black">
+        <input type="number" id="bookYear" placeholder="Year" class="p-3 border rounded-lg text-black">
+        <input type="text" id="bookGenre" placeholder="Genre" class="p-3 border rounded-lg text-black">
+        <input type="text" id="bookIsbn" placeholder="ISBN" class="p-3 border rounded-lg text-black">
+        <input type="text" id="bookImage" placeholder="Image URL" class="p-3 border rounded-lg text-black">
+        <button type="submit" class="btn bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-lg">Add Book</button>
+      </form>
+      <form id="eventForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <input type="text" id="eventTitle" placeholder="Title" class="p-3 border rounded-lg text-black">
+        <input type="date" id="eventDate" class="p-3 border rounded-lg text-black">
+        <input type="text" id="eventLocation" placeholder="Location" class="p-3 border rounded-lg text-black">
+        <input type="text" id="eventImage" placeholder="Image URL" class="p-3 border rounded-lg text-black">
+        <button type="submit" class="btn bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-lg">Add Event</button>
+      </form>
+    </div>
+
+    <h2 class="text-3xl font-bold mb-6">Books</h2>
+    <div id="booksList" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-12"></div>
+
+    <h2 class="text-3xl font-bold mb-6">Events</h2>
+    <div id="eventsList" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-12">
+      <div id="eventRegistration" class="glass p-4 rounded-xl hidden">
+        <h3 class="font-bold text-lg">Register for Event</h3>
+        <form id="registerForm" class="space-y-4 mt-4">
+          <input type="text" id="regName" placeholder="Your Name" class="p-2 border rounded-lg text-black w-full">
+          <input type="email" id="regEmail" placeholder="Your Email" class="p-2 border rounded-lg text-black w-full">
+          <button type="submit" class="btn bg-green-600 hover:bg-green-700 text-white p-2 rounded-lg w-full">Register</button>
+        </form>
+        <p id="regMessage" class="text-green-300 text-center mt-2 hidden"></p>
+      </div>
+    </div>
+
+    <h2 class="text-3xl font-bold mb-6">Statistics</h2>
+    <div class="glass p-6 rounded-xl">
+      <canvas id="monthlyBooksChart" class="w-full mb-6"></canvas>
+      <canvas id="userRolesChart" class="w-full"></canvas>
+    </div>
+  </div>
+  <footer class="footer p-6 text-center text-gray-300">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div>
+        <h3 class="font-bold mb-2">LibraHaven</h3>
+        <p>Municipal Library of Westfield</p>
+      </div>
+      <div>
+        <h3 class="font-bold mb-2">Visit</h3>
+        <p>Hours: 9 AM - 6 PM</p>
+        <p><a href="#" class="text-blue-200 hover:underline">Directions</a></p>
+      </div>
+      <div>
+        <h3 class="font-bold mb-2">Connect</h3>
+        <p><a href="#" class="text-blue-200 hover:underline">Contact Us</a></p>
+        <p><a href="#" class="text-blue-200 hover:underline">Newsletter</a></p>
+      </div>
+    </div>
+    <div class="mt-4">
+      <a href="#" class="text-2xl mx-2 text-blue-200 hover:text-blue-300"><i class="fab fa-facebook"></i></a>
+      <a href="#" class="text-2xl mx-2 text-blue-200 hover:text-blue-300"><i class="fab fa-twitter"></i></a>
+      <a href="#" class="text-2xl mx-2 text-blue-200 hover:text-blue-300"><i class="fab fa-instagram"></i></a>
+    </div>
+  </footer>
+
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  <script src="dashboard.js"></script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "email": "admin@library.org",
+      "password": "securePass123",
+      "name": "Library Admin",
+      "role": "admin"
+    },
+    {
+      "id": "2",
+      "email": "staff@library.org",
+      "password": "securePass123",
+      "name": "Library Staff",
+      "role": "staff"
+    },
+    {
+      "id": "3",
+      "email": "member@example.com",
+      "password": "securePass123",
+      "name": "Jane Member",
+      "role": "member"
+    }
+  ]
+}

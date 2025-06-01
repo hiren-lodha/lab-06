@@ -1,0 +1,24 @@
+{
+  "books": [
+    {
+      "id": "1",
+      "title": "The Silent Reader",
+      "author": "Emma Torres",
+      "year": "2023",
+      "genre": "Fiction",
+      "description": "A gripping novel about a librarian uncovering a hidden history through ancient manuscripts.",
+      "isbn": "978-1-234567-89-0",
+      "image": "placeholder-book-1.jpg"
+    },
+    {
+      "id": "2",
+      "title": "Code of Knowledge",
+      "author": "Rahul Singh",
+      "year": "2024",
+      "genre": "Non-Fiction",
+      "description": "An exploration of how information shapes modern society, blending technology and philosophy.",
+      "isbn": "978-1-987654-32-1",
+      "image": "placeholder-book-2.jpg"
+    }
+  ]
+}

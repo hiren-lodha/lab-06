@@ -1,0 +1,22 @@
+{
+  "events": [
+    {
+      "id": "1",
+      "title": "Author Talk: Emma Torres",
+      "date": "2025-06-15",
+      "description": "Join Emma Torres as she discusses her latest novel, The Silent Reader.",
+      "location": "Main Library Hall",
+      "isUpcoming": true,
+      "image": "placeholder-event-1.jpg"
+    },
+    {
+      "id": "2",
+      "title": "Book Club: Sci-Fi Classics",
+      "date": "2025-07-10",
+      "description": "A discussion of classic sci-fi novels, open to all members.",
+      "location": "Community Room",
+      "isUpcoming": true,
+      "image": "placeholder-event-2.jpg"
+    }
+  ]
+}

@@ -1,0 +1,123 @@
+openapi: 3.0.0
+info:
+  title: Community Library API
+  description: API for managing library books, events, and users
+  version: 1.0.0
+servers:
+  - url: http://localhost:3001/api/v1
+components:
+  schemas:
+    Book:
+      type: object
+      required: [title, author]
+      properties:
+        id: { type: string }
+        title: { type: string }
+        author: { type: string }
+        year: { type: string }
+        genre: { type: string }
+        description: { type: string }
+        isbn: { type: string }
+        image: { type: string }
+    Event:
+      type: object
+      required: [title, date, description]
+      properties:
+        id: { type: string }
+        title: { type: string }
+        date: { type: string, format: date }
+        description: { type: string }
+        location: { type: string }
+        isUpcoming: { type: boolean }
+        image: { type: string }
+    User:
+      type: object
+      required: [email, password, role]
+      properties:
+        id: { type: string }
+        email: { type: string }
+        password: { type: string }
+        name: { type: string }
+        role: { type: string, enum: [admin, staff, member] }
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+paths:
+  /books:
+    get:
+      summary: Get all books
+      responses:
+        '200':
+          description: A list of books
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Book'
+    post:
+      summary: Create a new book
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Book'
+      responses:
+        '201':
+          description: Book created
+  /books/{id}:
+    get:
+      summary: Get book by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Book details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+  /events:
+    get:
+      summary: Get all events
+      responses:
+        '200':
+          description: A list of events
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Event'
+  /auth/login:
+    post:
+      summary: User login
+      description: Authenticates a user and returns a JWT token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email: { type: string }
+                password: { type: string }
+      responses:
+        '200':
+          description: Successful login with JWT token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token: { type: string }
+        '401':
+          description: Invalid credentials
